@@ -93,7 +93,7 @@ namespace LANChat
 
                     // 发送连接消息
                     string formattedMessage = $"{DateTime.Now} - {textBoxUsername.Text} 已连接";
-                    AppendMessage(messagesBox, formattedMessage);
+                    SendMessage(formattedMessage, messagesBox, stream);
                 }
             }
             catch (Exception ex)
