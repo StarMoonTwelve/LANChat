@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+
 
 namespace LANChatServer
 {
@@ -182,6 +185,7 @@ namespace LANChatServer
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     UpdateConsole(port, message); // 更新对应控制台
                     Broadcast(message, client, port);
+                    LogMessage(port, message);
                 }
             }
             catch (SocketException) { }
@@ -213,6 +217,69 @@ namespace LANChatServer
                 if (client != sender)
                 {
                     client.Send(buffer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 记录消息到文件的方法
+        /// </summary>
+        /// <param name="port">端口号</param>
+        /// <param name="message">信息</param>
+        private void LogMessage(int port,string message)
+        {
+            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log");
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath); // 创建文件夹
+            }
+
+            string date = DateTime.Now.ToString("yyyy-MM-dd");
+            string filePath = Path.Combine(folderPath, $"chatlog_{GetLocalIPAddress()}_{port}_{date}.txt"); // 避免使用冒号
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath, true, Encoding.UTF8)) // 指定编码
+                {
+                    writer.WriteLine($"{message}");
+                }
+            }
+            catch (NotSupportedException ex)
+            {
+                MessageBox.Show($"不支持的路径格式: {ex.Message}");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show($"没有权限写入文件: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"写入日志时出错: {ex.Message}");
+            }
+        }
+        /// <summary>
+        /// 添加关闭卡控
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // 检查 Dictionary 是否为空
+            if (servers.Count > 0)
+            {
+                var result = MessageBox.Show("目前还存在使用的服务，是否需要全部关闭？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true; // 取消关闭
+
+                }
+                else
+                {
+                    // 如果用户选择是，可以在这里关闭所有 TcpListener
+                    foreach (var listener in servers.Values)
+                    {
+                        listener.Stop(); // 停止每个 TcpListener
+                    }
                 }
             }
         }

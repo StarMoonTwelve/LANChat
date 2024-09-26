@@ -57,7 +57,7 @@ namespace LANChat
                     // 创建提示标签
                     var labelInput = new Label
                     {
-                        Text = "输入消息:",
+                        Text = "输入消息(Enter发送消息,Shift+Enter换行):",
                         Dock = DockStyle.Bottom,
                         Height = 20 // 设置标签的高度
                     };

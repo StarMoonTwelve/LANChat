@@ -1,4 +1,6 @@
-﻿namespace LANChatServer
+﻿using System.Windows.Forms;
+
+namespace LANChatServer
 {
     partial class MainForm
     {
@@ -108,9 +110,10 @@
             this.Controls.Add(this.lblCurrentIP);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "MainForm";
-            this.Text = "局域网聊天服务器";
+            this.Text = "局域网聊天服务端";
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.FormClosing += new FormClosingEventHandler(this.MainForm_FormClosing);
 
         }
 
