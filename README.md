@@ -60,10 +60,22 @@ WinForm 版包括客户端和服务端，提供了一个图形用户界面，用
 
 ### 代码结构
 
+#### 服务端
 - `MainForm` 类：主窗口类，负责 UI 初始化和事件处理。
 - `ListenForClients` 方法：接受客户端连接。
 - `HandleClient` 方法：处理客户端消息。
 - `LogMessage` 方法：记录聊天消息到文件。
+
+#### 客户端
+- `MainForm` 类：主窗口类，负责 UI 初始化和事件处理。
+- `buttonConnect_Click` 方法：连接按钮事件，处理IP端口卡控，同时生成新标签页。
+- `buttonDisconnect_Click` 方法：断开连接按钮事件。
+- `Disconnect` 方法：具体端口断开方法，关闭连接，关闭标签页。
+- `ReceiveMessages` 方法：复制接受从服务端传来的消息。
+- `textBoxInputMessage_KeyDown` 方法：回车事件，准备发送消息。
+- `SendMessage` 方法：发送消息。
+- `AppendMessage` 方法：页面显示收到的消息。
+- `GetLocalIPAddress` 方法：显示本机IP。
 
 ## 控制台版
 
@@ -93,11 +105,16 @@ WinForm 版包括客户端和服务端，提供了一个图形用户界面，用
 
 ### 代码结构
 
+#### 服务端
 - `Program` 类：包含 `Main` 方法和客户端、服务端的消息处理逻辑。
 - `HandleClient` 方法：处理客户端连接和消息。
 - `Broadcast` 方法：将消息发送给所有其他客户端。
 - `LogMessage` 方法：记录聊天消息到文件。
 
+#### 客户端
+- `Program` 类：包含 `Main` 方法和客户端、服务端的消息处理逻辑。
+- `ReceiveMessages` 方法：接受消息方法。
+ 
 ## 注意事项
 
 - 确保防火墙允许指定端口的流量。
