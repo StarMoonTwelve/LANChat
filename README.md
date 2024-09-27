@@ -113,7 +113,7 @@ WinForm 版包括客户端和服务端，提供了一个图形用户界面，用
 
 #### 客户端
 - `Program` 类：包含 `Main` 方法和客户端、服务端的消息处理逻辑。
-- `ReceiveMessages` 方法：接受消息方法。
+- `ReceiveMessages` 方法：发送消息方法。
  
 ## 注意事项
 
